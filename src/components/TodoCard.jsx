@@ -1,4 +1,4 @@
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Modal } from 'react-bootstrap';
 import { useEffect, useState, useContext } from 'react';
 import { TodoContext } from '../contexts/TodoContext';
 
@@ -8,6 +8,10 @@ export default function TodoCard({ todo }) {
   const [timer, setTimer] = useState(0);
   const [timerInterval, setTimerInterval] = useState(null);
   const setTodos = useContext(TodoContext).setTodos;
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   //Functions related to the timer
   const startTimer = () => {
@@ -62,9 +66,23 @@ export default function TodoCard({ todo }) {
           <Button variant="secondary" href={`todo/${todo.id}`} className="ms-2">
             <i className="bi bi-pencil"></i>
           </Button>
-          <Button variant="danger" onClick={deleteTodo} className="ms-2">
+          <Button variant="danger" onClick={handleShow} className="ms-2">
             <i className="bi bi-trash3"></i>
           </Button>
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+            <Modal.Title>Confirm Delete</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are you sure you want to delete this todo?</Modal.Body>
+            <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={deleteTodo}>
+            Delete
+          </Button>
+        </Modal.Footer>
+          </Modal>
         </Card.Body>
       </Card>
     </>
